@@ -1,0 +1,11 @@
+google_keep:
+    username: '{{ GOOGLE_USERNAME }}'
+    token: '{{ GOOGLE_TOKEN }}'
+    default_list: '{{ GOOGLE_DEFAULT_LIST }}'
+
+alice:
+    allow_user:
+{% for item in ALLOW_USER|env_json %}
+        - id: {{ item['id'] }}
+          description: '{{ item['description'] }}'
+{% endfor %}

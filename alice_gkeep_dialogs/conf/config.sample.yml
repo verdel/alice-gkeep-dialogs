@@ -1,0 +1,9 @@
+google_keep:
+    username: ''
+    token: ''
+    default_list: ''
+
+alice:
+    allow_user:
+      - id: ''
+        description: ''

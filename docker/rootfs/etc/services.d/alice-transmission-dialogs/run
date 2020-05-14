@@ -1,0 +1,2 @@
+#!/usr/bin/with-contenv sh
+alice_gkeep -c /opt/alice-gkeep-dialogs/config.yml
