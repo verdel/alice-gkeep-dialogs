@@ -121,6 +121,8 @@ def handle_dialog(req, res):
             return
 
     elif any(elem in req['request']['nlu']['tokens'] for elem in ['добавь', 'добавить']):
+        if 'добавить' in req['request']['nlu']['tokens']:
+            res['response']['end_session'] = True
         # TODO Individual acknowledgement for item create operation
         item_list = re.match(r'.*Добав(?:ь|ить)\s(.*)(?:\sв\sсписок)\s*(.*)', req['request']['original_utterance'], re.IGNORECASE)
         if item_list:
@@ -146,6 +148,8 @@ def handle_dialog(req, res):
             return
 
     elif any(elem in req['request']['nlu']['tokens'] for elem in ['отметь', 'отметить']):
+        if 'отметить' in req['request']['nlu']['tokens']:
+            res['response']['end_session'] = True
         item_list = re.match(r'.*Отмет(?:ь|ить)\s(.*)(?:\sв\sсписке)\s*(.*)', req['request']['original_utterance'], re.IGNORECASE)
         if item_list:
             if item_list.group(2):
@@ -178,6 +182,8 @@ def handle_dialog(req, res):
             return
 
     elif any(elem in req['request']['nlu']['tokens'] for elem in ['удали', 'удалить']):
+        if 'удалить' in req['request']['nlu']['tokens']:
+            res['response']['end_session'] = True
         # TODO Individual acknowledgement for item delete operation
         item_list = re.match(r'.*Удал(?:и|ить)\s(.*)(?:\sиз\sсписка)\s*([\w\s]*)', req['request']['original_utterance'], re.IGNORECASE)
         if item_list:
