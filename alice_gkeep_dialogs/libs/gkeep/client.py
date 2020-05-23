@@ -54,7 +54,7 @@ class GKeep(object):
             else:
                 for item in glist.items:
                     if add_item.lower().replace(' ', '') == item.text.lower().replace(' ', ''):
-                        return True
+                        return item
                 return False
         else:
             raise exception.GoogleKeepListNotFound('Не найден список {}'.format(list_name))
@@ -71,8 +71,11 @@ class GKeep(object):
                 return False
             else:
                 for item in add_item_list:
-                    if not self.__checkItemExist(list_name, item):
+                    glist_item_exist = self.__checkItemExist(list_name, item)
+                    if not glist_item_exist:
                         glist.add(item)
+                    elif glist_item_exist.checked:
+                        glist_item_exist.checked = False
                 self.keep.sync()
                 return True
         else:
