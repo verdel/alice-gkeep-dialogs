@@ -3,7 +3,7 @@
 .. moduleauthor:: Kai <z@kwi.li>
 """
 
-__version__ = '0.11.14'
+__version__ = '0.11.16'
 
 import logging
 import re
@@ -181,7 +181,7 @@ class API(object):
         self._session = requests.Session()
         self._auth = auth
         self._base_url = base_url
-        self._session.headers.update({'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'})
+        self._session.headers.update({'User-Agent': 'x-gkeepapi/%s (https://github.com/kiwiz/gkeepapi)' % __version__})
 
     def getAuth(self):
         """Get authentication details for this API.
@@ -990,7 +990,14 @@ class Keep(object):
         if resync:
             self._clear()
 
-        # Sync reminders. Fetch updates until we reach the newest version.
+        # self._sync_reminders(resync)
+        self._sync_notes(resync)
+
+        if _node.DEBUG:
+            self._clean()
+
+    def _sync_reminders(self, resync=False):
+        # Fetch updates until we reach the newest version.
         while True:
             logger.debug('Starting reminder sync: %s', self._reminder_version)
             changes = self._reminders_api.list()
@@ -1007,7 +1014,8 @@ class Keep(object):
             if self._reminder_version == history['highestStorageVersion']:
                 break
 
-        # Sync notes. Fetch updates until we reach the newest version.
+    def _sync_notes(self, resync=False):
+        # Fetch updates until we reach the newest version.
         while True:
             logger.debug('Starting keep sync: %s', self._keep_version)
 
@@ -1039,9 +1047,6 @@ class Keep(object):
             # Check if there are more changes to retrieve.
             if not changes['truncated']:
                 break
-
-        if _node.DEBUG:
-            self._clean()
 
     def _parseTasks(self, raw):
         pass

@@ -619,8 +619,8 @@ class NodeTimestamps(Element):
 
     def _load(self, raw):
         super(NodeTimestamps, self)._load(raw)
-        self._created = self.str_to_dt(raw['created']) \
-            if 'created' in raw else None
+        if 'created' in raw:
+            self._created = self.str_to_dt(raw['created'])
         self._deleted = self.str_to_dt(raw['deleted']) \
             if 'deleted' in raw else None
         self._trashed = self.str_to_dt(raw['trashed']) \
@@ -632,8 +632,7 @@ class NodeTimestamps(Element):
     def save(self, clean=True):
         ret = super(NodeTimestamps, self).save(clean)
         ret['kind'] = 'notes#timestamps'
-        if self._created is not None:
-            ret['created'] = self.dt_to_str(self._created)
+        ret['created'] = self.dt_to_str(self._created)
         if self._deleted is not None:
             ret['deleted'] = self.dt_to_str(self._deleted)
         if self._trashed is not None:
@@ -1197,6 +1196,7 @@ class TopLevelNode(Node):
         self._pinned = raw['isPinned'] if 'isPinned' in raw else False
         self._title = raw['title'] if 'title' in raw else ''
         self.labels.load(raw['labelIds'] if 'labelIds' in raw else [])
+
         self.collaborators.load(
             raw['roleInfo'] if 'roleInfo' in raw else [],
             raw['shareRequests'] if 'shareRequests' in raw else [],
